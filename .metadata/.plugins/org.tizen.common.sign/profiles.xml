@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<profiles version="3.0">
+<profile name="Tracker">
+<profileitem ca="/Users/irtaza/tizen-sdk/tools/certificate-generator/certificates/developer/tizen-developer-ca.cer" distributor="0" key="/Users/irtaza/tizen-sdk-data/keystore/author/Tracker_Profile.p12" password="zMHfTpjsxBwQk4KID9AjhsZhHK1z5dbL" rootca=""/>
+<profileitem ca="/Users/irtaza/tizen-sdk/tools/certificate-generator/certificates/distributor/tizen-distributor-ca.cer" distributor="1" key="/Users/irtaza/tizen-sdk/tools/certificate-generator/certificates/distributor/tizen-distributor-signer.p12" password="Vy63flx5JBMc5GA4iEf8oFy+8aKE7FX/+arrDcO4I5k=" rootca=""/>
+<profileitem ca="" distributor="2" key="" password="xmEcrXPl1ss=" rootca=""/>
+</profile>
+</profiles>
