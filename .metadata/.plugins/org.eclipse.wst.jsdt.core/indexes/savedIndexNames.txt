@@ -1,8 +1,0 @@
-INDEX VERSION 1.3+/Users/irtaza/Desktop/HsKA/Projektarbeiten/Projektarbeit I/Smart-Tracker/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
-823532726.index
-1326126979.index
-226317669.index
-3448402433.index
-59191659.index
-1129071612.index
-1530897454.index

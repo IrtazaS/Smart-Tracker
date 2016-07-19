@@ -33,6 +33,10 @@ var SAAgent,
     SASocket,
     connectionListener,
     responseTxt = document.getElementById("responseTxt");
+var xlist = [];
+var ylist = [];
+var zlist = [];
+var count = 0;
 
 /* Make Provider application running in background */
 tizen.application.getCurrentApplication().hide();
@@ -150,38 +154,76 @@ webapis.sa.requestSAAgent(requestOnSuccess, requestOnError);
     });
 }());
 
+var xold, yold, zold;
+var accelcounter = 0;
+var date = new Date();
+var time;
 window.addEventListener('devicemotion', function(e) {
-	var ax = e.accelerationIncludingGravity.x;
-	var ay = -e.accelerationIncludingGravity.y;
-	var az = -e.accelerationIncludingGravity.z;
-	document.getElementById("xaccel").innerHTML =  'X : ' +  ax;
-	document.getElementById("yaccel").innerHTML = 'Y : ' + ay;
-	document.getElementById("zaccel").innerHTML = 'Z : ' + az;
+//	var ax = e.accelerationIncludingGravity.x;
+//	var ay = -e.accelerationIncludingGravity.y;
+//	var az = -e.accelerationIncludingGravity.z;
+	time = date.getTime();
+	var ax = e.acceleration.x;
+	var ay = -e.acceleration.y;
+	var az = -e.acceleration.z;
+	document.getElementById("xaccel").innerHTML =  'X : ' +  ax.toFixed(4);
+	document.getElementById("yaccel").innerHTML = 'Y : ' + ay.toFixed(4);
+	document.getElementById("zaccel").innerHTML = 'Z : ' + az.toFixed(4);
 	var rotx = e.rotationRate.alpha ;
-	document.getElementById("rotx").innerHTML = 'rotx : ' + rotx;
+	document.getElementById("rotx").innerHTML = 'rotx : ' + rotx.toFixed(4);
+	var roty = e.rotationRate.beta ;
+	document.getElementById("roty").innerHTML = 'roty : ' + roty.toFixed(4);
 	
-	var pData = {
-            calorie: e.cumulativeCalorie,
-            distance: e.cumulativeDistance,
-            runDownStep: e.cumulativeRunDownStepCount,
-            runStep: e.cumulativeRunStepCount,
-            runUpStep: e.cumulativeRunUpStepCount,
-            speed: e.speed,
-            stepStatus: e.stepStatus,
-            totalStep: e.cumulativeTotalStepCount,
-            walkDownStep: e.cumulativeWalkDownStepCount,
-            walkStep: e.cumulativeWalkStepCount,
-            walkUpStep: e.cumulativeWalkUpStepCount,
-            walkingFrequency: e.walkingFrequency
-        };
+//	var pData = {
+//            calorie: e.cumulativeCalorie,
+//            distance: e.cumulativeDistance,
+//            runDownStep: e.cumulativeRunDownStepCount,
+//            runStep: e.cumulativeRunStepCount,
+//            runUpStep: e.cumulativeRunUpStepCount,
+//            speed: e.speed,
+//            stepStatus: e.stepStatus,
+//            totalStep: e.cumulativeTotalStepCount,
+//            walkDownStep: e.cumulativeWalkDownStepCount,
+//            walkStep: e.cumulativeWalkStepCount,
+//            walkUpStep: e.cumulativeWalkUpStepCount,
+//            walkingFrequency: e.walkingFrequency
+//        };
 	//document.getElementById("rotx").innerHTML = 'speed : ' + String(pData.speed);
-	
+	var xPos = ax;//.toFixed(0);
+	var yPos = ay;//.toFixed(0);
+	var zPos = az;
 	/* Send new data to Consumer */
-    SASocket.sendData(SAAgent.channelIds[0], rotX);
+	//xlist.push(ax);
+	//ylist.push(ay);
+	//zlist.push(az);
+	count++;
+	if(count == 3)
+		{
+		var xpos = median(xlist);
+		var ypos = median(ylist);
+		var zpos = median(ylist);
+		count = 0;
+    SASocket.sendData(SAAgent.channelIds[0], "x"+ax);
+    SASocket.sendData(SAAgent.channelIds[0], "y"+ay);
+    SASocket.sendData(SAAgent.channelIds[0], "z"+az);
+    SASocket.sendData(SAAgent.channelIds[0], "t"+time);
+		}
 //    createHTML("rotx:<br />" +
 //                rotx);
 
 });
+
+function median(values) {
+
+    values.sort( function(a,b) {return a - b;} );
+
+    var half = Math.floor(values.length/2);
+
+    if(values.length % 2)
+        return values[half];
+    else
+        return (values[half-1] + values[half]) / 2.0;
+}
 
 (function(tau) {
     var toastPopup = document.getElementById('toast');
