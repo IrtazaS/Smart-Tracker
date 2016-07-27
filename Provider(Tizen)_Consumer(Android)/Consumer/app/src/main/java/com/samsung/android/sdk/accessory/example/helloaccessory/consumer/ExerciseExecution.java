@@ -13,20 +13,22 @@ public class ExerciseExecution extends AppCompatActivity {
 
     private Bundle _bundle;
     private Button _skip;
-    private TextView _showScore;
+    private static TextView _showScore;
     private int _currentHalfRepeats = 0;
     private int _exerciseRepeats = 10;
-    private double _detectionTolerance = 0.01;
-    private double _additionTolerance = 0.2;
+    private double _detectionTolerance = 0.4;
+    private double _additionTolerance = 0.1;
     private double[] _lastVector = new double[3];
     private double[] _newVector = new double[3];
     static boolean active = false;
+    static int trainingId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise_execution);
         _bundle = getIntent().getExtras();
+        trainingId = (int)_bundle.get("training");
         final FitnessExercise exercise = ManagementSystem.getInstance().getFitnessExercise((String) _bundle.get("exercise"));
         if (exercise != null) {
             VideoView mVideoView  = (VideoView)findViewById(R.id.videoView);
@@ -58,7 +60,7 @@ public class ExerciseExecution extends AppCompatActivity {
     }
 
     private void exerciseFinished(){
-        int id = (int)_bundle.get("training");
+        int id = trainingId;//(int)_bundle.get("training");
         id--;
         Intent myIntent;
         if(0 < id) {
@@ -97,13 +99,26 @@ public class ExerciseExecution extends AppCompatActivity {
 
     private void counter(){
         _currentHalfRepeats++;
-        if(0 < (int)_bundle.get("training")){
-            _showScore.setText(_currentHalfRepeats/2 + " / " + _exerciseRepeats);
+        //if(0 < (int)_bundle.get("training"))
+            if(0 < trainingId)
+        {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    _showScore.setText(_currentHalfRepeats/2 + " / " + _exerciseRepeats);
+                }
+            });
             if(_exerciseRepeats <= _currentHalfRepeats/2){
+                _currentHalfRepeats = 0;
                 exerciseFinished();
             }
         }else{
-            _showScore.setText(_currentHalfRepeats/2);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        _showScore.setText(String.valueOf(_currentHalfRepeats/2));
+                    }
+                });
         }
     }
 
