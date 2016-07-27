@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">HelloAccessory(C)</string>
     <string name="hello_world">Hello Accessory!</string>
     <string name="ConnectionEstablishedMsg">Service Connection with HelloAccessory(P) has been established.</string>
     <string name="ConnectionTerminateddMsg">Service Connection with HelloAccessory(P) has been terminated.</string>
@@ -12,5 +11,27 @@
     <string name="buttonConnect">Connect</string>
     <string name="buttonDisconnect">Disconnect</string>
     <string name="buttonSend">Send</string>
+
+    <string name="app_name">SmartTracker</string>
+
+    <!-- labels -->
+    <string name="appName">Training</string>
+    <string name="exercises">Übungen</string>
+    <string name="exerciseName">Übungsname</string>
+    <string name="exerciseDescription">Übungsbeschreibung</string>
+    <string name="repeats">Wiederholungen</string>
+
+    <!-- activity_main Buttons -->
+    <string name="shortTraining">5 Minuten Training</string>
+    <string name="fullTraining">20 Minuten Training</string>
+    <string name="ownTraining">eigenes Training</string>
+    <string name="freeTraining">freie Übungswahl</string>
+    <string name="title_activity_free_training">FreeTraining</string>
+
+    <!-- activity_exercise -->
+    <string name="b_start">Start</string>
+
+    <!-- activity_exerciseExecution -->
+    <string name="b_skip">Überspringen</string>
 
 </resources>

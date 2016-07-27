@@ -1,1 +1,85 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"    xmlns:tools="http://schemas.android.com/tools"    android:layout_width="match_parent"    android:layout_height="match_parent"    android:orientation="vertical"    tools:context=".ConsumerActivity" >    <TextView        android:id="@+id/tvStatus"        android:layout_width="match_parent"        android:layout_height="wrap_content"        android:gravity="center"        android:layout_weight="0.06"        android:textSize="24sp"        android:textStyle="bold" />    <ListView        android:id="@+id/lvMessage"        android:layout_width="match_parent"        android:layout_height="0dip"        android:layout_weight="0.9" >    </ListView>    <Button        android:id="@+id/buttonConnect"        android:layout_width="fill_parent"        android:layout_height="wrap_content"        android:onClick="mOnClick"        android:text="@string/buttonConnect"        android:textSize="24sp"        android:textStyle="bold" />    <Button        android:id="@+id/buttonDisconnect"        android:layout_width="fill_parent"        android:layout_height="wrap_content"        android:onClick="mOnClick"        android:text="@string/buttonDisconnect"        android:textSize="24sp"        android:textStyle="bold" />    <Button        android:id="@+id/buttonSend"        android:layout_width="fill_parent"        android:layout_height="wrap_content"        android:onClick="mOnClick"        android:text="@string/buttonSend"        android:textSize="24sp"        android:textStyle="bold" /></LinearLayout>
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.samsung.android.sdk.accessory.example.helloaccessory.consumer.MainActivity"
+    android:background="#141414">
+
+    <!--android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"-->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:text="@string/appName"
+        android:id="@+id/textView"
+        android:layout_weight="0.02"
+        android:textSize="@dimen/abc_action_bar_progress_bar_size"
+        android:gravity="center_vertical|center_horizontal"
+        android:textColor="#e6e6e6"
+        android:layout_margin="5dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Disconnected"
+        android:id="@+id/textView2"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.02"
+        android:gravity="center_horizontal"
+        android:textColor="#e6e6e6"
+        android:layout_margin="5dp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/shortTraining"
+        android:id="@+id/shortTraining"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0.02"
+        android:textSize="24sp"
+        android:textColor="#e6e6e6"
+        android:layout_margin="5dp"
+        android:background="#5a5a5a" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/fullTraining"
+        android:id="@+id/fullTraining"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.02"
+        android:textSize="24sp"
+        android:textColor="#e6e6e6"
+        android:background="#5a5a5a"
+        android:layout_margin="5dp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ownTraining"
+        android:id="@+id/ownTraining"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.02"
+        android:textSize="24sp"
+        android:textColor="#e6e6e6"
+        android:layout_margin="5dp"
+        android:background="#5a5a5a" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/freeTraining"
+        android:id="@+id/freeTraining"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.02"
+        android:singleLine="false"
+        android:textSize="24sp"
+        android:textColor="#e6e6e6"
+        android:background="#5a5a5a"
+        android:layout_margin="5dp" />
+
+</LinearLayout>

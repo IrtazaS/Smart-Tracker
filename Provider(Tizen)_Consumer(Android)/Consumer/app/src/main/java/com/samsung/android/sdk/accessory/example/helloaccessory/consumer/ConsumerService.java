@@ -22,18 +22,46 @@
  */
 
 package com.samsung.android.sdk.accessory.example.helloaccessory.consumer;
-
-import java.io.IOException;
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd. All rights reserved.
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that
+ * the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright notice,
+ *       this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright notice,
+ *       this list of conditions and the following disclaimer in the documentation and/or
+ *       other materials provided with the distribution.
+ *     * Neither the name of Samsung Electronics Co., Ltd. nor the names of its contributors may be used to endorse or
+ *       promote products derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
 
 import android.content.Intent;
-import android.os.Handler;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
-import android.widget.Toast;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.samsung.android.sdk.SsdkUnsupportedException;
-import com.samsung.android.sdk.accessory.*;
+import com.samsung.android.sdk.accessory.SA;
+import com.samsung.android.sdk.accessory.SAAgent;
+import com.samsung.android.sdk.accessory.SAPeerAgent;
+import com.samsung.android.sdk.accessory.SASocket;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class ConsumerService extends SAAgent {
     private static final String TAG = "HelloAccessory(C)";
@@ -42,6 +70,8 @@ public class ConsumerService extends SAAgent {
     private final IBinder mBinder = new LocalBinder();
     private ServiceConnection mConnectionHandler = null;
     Handler mHandler = new Handler();
+    MainActivity mainactivity;
+    ExerciseExecution exerciseExecution;
 
     public ConsumerService() {
         super(TAG, SASOCKET_CLASS);
@@ -50,6 +80,8 @@ public class ConsumerService extends SAAgent {
     @Override
     public void onCreate() {
         super.onCreate();
+        mainactivity = new MainActivity();
+        exerciseExecution = new ExerciseExecution();
         SA mAccessory = new SA();
         try {
             mAccessory.initialize(this);
@@ -67,6 +99,7 @@ public class ConsumerService extends SAAgent {
              */
             stopSelf();
         }
+
     }
 
     @Override
@@ -82,11 +115,13 @@ public class ConsumerService extends SAAgent {
         } else if (result == SAAgent.FINDPEER_DEVICE_NOT_CONNECTED) {
             Toast.makeText(getApplicationContext(), "FINDPEER_DEVICE_NOT_CONNECTED", Toast.LENGTH_LONG).show();
             updateTextView("Disconnected");
+            Toast.makeText(getApplicationContext(), "Check Bluetooth Connection", Toast.LENGTH_LONG).show();
         } else if (result == SAAgent.FINDPEER_SERVICE_NOT_FOUND) {
             Toast.makeText(getApplicationContext(), "FINDPEER_SERVICE_NOT_FOUND", Toast.LENGTH_LONG).show();
             updateTextView("Disconnected");
+            Toast.makeText(getApplicationContext(), "Check Bluetooth Connection", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getApplicationContext(), R.string.NoPeersFound, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "No Peers found", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -102,13 +137,14 @@ public class ConsumerService extends SAAgent {
         if (result == SAAgent.CONNECTION_SUCCESS) {
             this.mConnectionHandler = (ServiceConnection) socket;
             updateTextView("Connected");
+            Exercise.b_deviceconnected = true;
         } else if (result == SAAgent.CONNECTION_ALREADY_EXIST) {
             updateTextView("Connected");
             Toast.makeText(getBaseContext(), "CONNECTION_ALREADY_EXIST", Toast.LENGTH_LONG).show();
         } else if (result == SAAgent.CONNECTION_DUPLICATE_REQUEST) {
             Toast.makeText(getBaseContext(), "CONNECTION_DUPLICATE_REQUEST", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getBaseContext(), R.string.ConnectionFailure, Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), "Connection Failure", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -144,15 +180,55 @@ public class ConsumerService extends SAAgent {
         public void onError(int channelId, String errorMessage, int errorCode) {
         }
 
+        double yPos = 0;
+        double xPos = 0;
+        double zPos = 0;
+        long watchtime = 0;
+        boolean writetosensorarray = false;
+        List<Double> arrayX = new ArrayList<Double>();
+        List<Double> arrayY = new ArrayList<Double>();
+        List<Double> arrayZ = new ArrayList<Double>();
+        List<Long> arraytimer = new ArrayList<Long>();
+
         @Override
         public void onReceive(int channelId, byte[] data) {
-            final String message = new String(data);
-            addMessage("Received rotX: ", message);
+
+            //long time = System.currentTimeMillis();
+            //arraytimer.add(time);
+            String message = new String(data);
+            addMessage("Received: ", message);
+            if (message.contains("x")) {
+                message = message.replace("x", "");
+                xPos = Float.parseFloat(message);
+                arrayX.add(xPos);
+            } else if (message.contains("y")) {
+                message = message.replace("y", "");
+                yPos = Float.parseFloat(message);
+                arrayY.add(yPos);
+            } else if (message.contains("z")) {
+                message = message.replace("z", "");
+                zPos = Float.parseFloat(message);
+                arrayZ.add(zPos);
+            }
+            else if (message.contains("t")) {
+                message = message.replace("t", "");
+                writetosensorarray = true;
+                watchtime = Long.parseLong(message);
+                arraytimer.add(watchtime);
+            }
+
+            if(writetosensorarray && exerciseExecution.active) {
+                exerciseExecution.evaluate(xPos, yPos, zPos);
+
+            }
+            //Toast.makeText(getApplicationContext(), "FINDPEER_DEVICE_NOT_CONNECTED", Toast.LENGTH_LONG).show();
         }
+
 
         @Override
         protected void onServiceConnectionLost(int reason) {
             updateTextView("Disconnected");
+            Toast.makeText(getApplicationContext(), "Check Bluetooth Connection", Toast.LENGTH_LONG).show();
             closeConnection();
         }
     }
@@ -217,7 +293,7 @@ public class ConsumerService extends SAAgent {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                ConsumerActivity.updateTextView(str);
+                mainactivity.connectionView.setText(str);
             }
         });
     }
@@ -227,7 +303,7 @@ public class ConsumerService extends SAAgent {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                ConsumerActivity.addMessage(strToUI);
+                //
             }
         });
     }
