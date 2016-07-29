@@ -16,7 +16,7 @@
 
     <!-- labels -->
     <string name="appName">Training</string>
-    <string name="exercises">Übungen</string>
+    <string name="exercises"> Übungen</string>
     <string name="exerciseName">Übungsname</string>
     <string name="exerciseDescription">Übungsbeschreibung</string>
     <string name="repeats">Wiederholungen</string>

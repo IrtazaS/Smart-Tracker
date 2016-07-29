@@ -95,6 +95,21 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Waiting for Connection...", Toast.LENGTH_SHORT)
                         .show();
                 break;
+            case R.id.action_disconnect:
+                if (mIsBound == true && mConsumerService != null) {
+                    if (mConsumerService.closeConnection() == false) {
+                        connectionView.setText("Disconnected");
+                    }
+                }
+                // Un-bind service
+                if (mIsBound) {
+                    unbindService(mConnection);
+                    Exercise.b_deviceconnected = false;
+                    mIsBound = false;
+                }
+                Toast.makeText(this, "Device Disconnected", Toast.LENGTH_SHORT)
+                        .show();
+                break;
             default:
                 break;
         }

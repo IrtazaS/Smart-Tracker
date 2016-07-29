@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.samsung.android.sdk.accessory.example.helloaccessory.consumer.Exercise"
-    android:background="#000000">
+    android:background="#222222">
 
     <TextView
         android:layout_width="match_parent"

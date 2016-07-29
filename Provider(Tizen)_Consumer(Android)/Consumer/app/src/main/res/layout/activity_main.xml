@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.samsung.android.sdk.accessory.example.helloaccessory.consumer.MainActivity"
-    android:background="#141414">
+    android:background="#222222">
 
     <!--android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"

@@ -6,5 +6,11 @@
         android:showAsAction="always"
         android:icon="@drawable/ic_action_bluetooth_connected"
         android:title="Connect"/>
+    <item
+        android:id="@+id/action_disconnect"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_action_bluetooth_connected"
+        android:title="Disconnect"/>
 
 </menu>

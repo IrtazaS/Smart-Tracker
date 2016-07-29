@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.samsung.android.sdk.accessory.example.helloaccessory.consumer.FreeTraining"
-    android:background="#141414">
+    android:background="#222222">
 
     <TextView
         android:layout_width="match_parent"
@@ -20,6 +20,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="@string/exercises"
         android:id="@+id/textView2"
         android:layout_weight="0.02"

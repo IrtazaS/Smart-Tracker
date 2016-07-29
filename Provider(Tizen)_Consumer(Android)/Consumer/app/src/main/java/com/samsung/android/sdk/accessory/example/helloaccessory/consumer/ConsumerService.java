@@ -60,6 +60,7 @@ import com.samsung.android.sdk.accessory.SASocket;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -72,6 +73,8 @@ public class ConsumerService extends SAAgent {
     Handler mHandler = new Handler();
     MainActivity mainactivity;
     ExerciseExecution exerciseExecution;
+    private double _puffer[][] = new double[][]{{0,0,0},{0.0000001,-0.00001,0.000001},{0.000002,0.00000001,-0.0000002}};
+    private int _counter = 0;
 
     public ConsumerService() {
         super(TAG, SASOCKET_CLASS);
@@ -218,8 +221,10 @@ public class ConsumerService extends SAAgent {
             }
 
             if(writetosensorarray && exerciseExecution.active) {
-                exerciseExecution.evaluate(xPos, yPos, zPos);
-
+                pushToArray(xPos, yPos, zPos);
+                int medianIndex = getMedianIndex();
+                //exerciseExecution.evaluate(xPos, yPos, zPos);
+                exerciseExecution.evaluate(_puffer[medianIndex][0], _puffer[medianIndex][1], _puffer[medianIndex][2]);
             }
             //Toast.makeText(getApplicationContext(), "FINDPEER_DEVICE_NOT_CONNECTED", Toast.LENGTH_LONG).show();
         }
@@ -306,5 +311,34 @@ public class ConsumerService extends SAAgent {
                 //
             }
         });
+    }
+
+    private void pushToArray(double x, double y, double z){
+        _puffer[_counter%_puffer.length][0] = x;
+        _puffer[_counter%_puffer.length][1] = y;
+        _puffer[_counter%_puffer.length][2] = z;
+        _counter++;
+    }
+
+    /**
+     * only for odd arrays
+     * @return
+     */
+    private int getMedianIndex(){
+        double test;
+        double[] vectorLength = new double[3];
+        vectorLength[0] = Math.sqrt(_puffer[0][0]*_puffer[0][0]+_puffer[0][1]*_puffer[0][1]+_puffer[0][2]*_puffer[0][2]);
+        vectorLength[1] = Math.sqrt(_puffer[1][0]*_puffer[1][0]+_puffer[1][1]*_puffer[1][1]+_puffer[1][2]*_puffer[1][2]);
+        vectorLength[2] = Math.sqrt(_puffer[2][0]*_puffer[2][0]+_puffer[2][1]*_puffer[2][1]+_puffer[2][2]*_puffer[2][2]);
+        double median = 0;
+        Arrays.sort(vectorLength);
+        median = (double) vectorLength[vectorLength.length/2];
+        for(int i = 0; i < vectorLength.length; i++){
+            test = Math.abs(Math.sqrt(_puffer[i][0]*_puffer[i][0]+_puffer[i][1]*_puffer[i][1]+_puffer[i][2]*_puffer[i][2]));
+            if(test - Math.abs(median) < 0.001 && -0.001 < test - Math.abs(median)){
+                return i;
+            }
+        }
+        return -1;
     }
 }
