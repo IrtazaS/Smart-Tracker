@@ -1,2 +1,2 @@
 # Smart-Tracker
-Android App for Jawbone UP Move
+Fitness Android App for Samsung Gear S
